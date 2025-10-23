@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Animatsiyali Registratsiya Forma</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+  <div class="stage">
+    <div class="card" role="region" aria-label="Registratsiya kartasi">
+      <div class="visual" aria-hidden="true">
+        <div class="brand">NIZOMOV</div>
+        <h3 class="brt">backentsiz kichk, <br> Ai royhattan otish </h3>
+        <p>To'ldiring va tezda boshlang. Oson va hafsiz.</p>
+        <div class="ribbons">
+          <div class="ribbon">Safe</div>
+          <div class="ribbon">Fast</div>
+          <div class="ribbon">Modern</div>
+        </div>
+      </div>
+
+      <div class="form-wrap">
+        <h2>Ro'yxatdan o'tish</h2>
+        <p class="sub">Hisob yarating — va Savolaringizga javob oling.</p>
+
+        <form id="regForm" action="/" method="post" onsubmit="return handleSubmit(event)">
+          <div class="row">
+            <div class="field">
+              <input class="input" type="text" name="username" id="username" placeholder=" " autocomplete="name" required>
+              <label for="username">Foydalanuvchi nomi</label>
+            </div>
+            <div class="field">
+              <input class="input" type="email" name="email" id="email" placeholder=" " autocomplete="email" required>
+              <label for="email">Email</label>
+            </div>
+          </div>
+
+          <div class="field">
+            <input class="input" type="password" name="password" id="password" placeholder=" " minlength="6" required oninput="updateStrength()">
+            <label for="password">Parol</label>
+          </div>
+
+          <div class="strength" aria-hidden="true"><i id="strengthBar"></i></div>
+          <div class="field">
+            <input class="input" type="password" name="confirm_password" id="confirm_password" placeholder=" " minlength="6" required>
+            <label for="confirm_password">Parolni tasdiqlash</label>
+          </div>
+          
+          <div style="display:flex;gap:10px;align-items:center;justify-content:space-between;">
+            <div class="muted">sizda hsob bormi? <a href="#" style="color:inherit; font-weight:600; text-decoration:underline">Kirish</a></div>
+<button class="btn" type="button" onclick="window.location.href='new2.html'">
+  Hozir Boshlash
+</buttonclass>
+
+ <script>
+  function goToPage() {
+    window.location.href = "new2.html";
+  }
+</script>
+
+
+
+            </a>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+<script>
+  // Parol kuchini aniqlash (oddiy vizual)
+  function updateStrength(){
+    const p = document.getElementById('password')}

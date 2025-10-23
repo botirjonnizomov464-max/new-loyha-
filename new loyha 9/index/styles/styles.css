@@ -1,0 +1,98 @@
+
+.sales-section {
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  color: white;
+  text-align: center;
+  padding: 80px 20px;
+}
+.sales-title {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+.sales-subtitle {
+  font-size: 20px;
+  margin-bottom: 50px;
+  opacity: 0.9;
+}
+.cards {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+.card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 30px;
+  width: 280px;
+  transition: 0.4s;
+}
+.card:hover {
+  transform: translateY(-10px);
+  background: rgba(255, 255, 255, 0.2);
+}
+.cta-button {
+  background: #ffcc00;
+  color: #000;
+  border: none;
+  padding: 15px 40px;
+  font-size: 20px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.cta-button:hover {
+  background: #ffaa00;
+  transform: scale(1.1);
+}
+
+/* FAQ bo‘limi */
+.faq-section {
+  display: none;
+  padding: 80px 20px;
+  background: #f9f9f9;
+  text-align: center;
+}
+.faq-section h2 {
+  font-size: 36px;
+  margin-bottom: 30px;
+}
+.faq-container {
+  max-width: 800px;
+  margin: auto;
+  text-align: left;
+}
+.faq {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+.faq-question {
+  font-size: 20px;
+  cursor: pointer;
+  padding: 10px 0;
+  position: relative;
+  transition: 0.3s;
+}
+.faq-question:hover {
+  color: #2575fc;
+}
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+  font-size: 16px;
+  padding-left: 10px;
+  color: #555;
+}
+.faq-question.active::after {
+  content: "▲";
+  position: absolute;
+  right: 0;
+}
+.faq-question::after {
+  content: "▼";
+  position: absolute;
+  right: 0;
+}

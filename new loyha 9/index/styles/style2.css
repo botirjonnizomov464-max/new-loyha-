@@ -1,0 +1,38 @@
+
+    
+    :root{--bg:#0f1724;--card:#0b1220;--accent:#06b6d4;--muted:#94a3b8;--glass: rgba(255,255,255,0.03)}
+    html,body{height:100%;margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#071029 0%, #071a2b 100%);color:#e6eef6}
+    .app{max-width:1100px;margin:28px auto;padding:20px;display:grid;grid-template-columns:250px 1fr 300px;gap:18px}
+    .panel{background:var(--card);border-radius:12px;padding:16px;box-shadow:0 6px 18px rgba(2,6,23,0.6)}
+
+    /* LEFT: History */
+    .history h3{margin:0 0 12px 0;font-size:18px}
+    .convo-list{display:flex;flex-direction:column;gap:8px;max-height:64vh;overflow:auto}
+    .convo{padding:10px;border-radius:8px;background:var(--glass);cursor:pointer;border:1px solid rgba(255,255,255,0.02)}
+    .convo:hover{transform:translateY(-2px)}
+
+    /* CENTER: Chat */
+    .chat-area{display:flex;flex-direction:column;height:76vh}
+    .chat-header{display:flex;align-items:center;justify-content:space-between}
+    .messages{flex:1;overflow:auto;padding:12px;margin-top:12px;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.015));}
+    .msg{margin:8px 0;display:flex}
+    .msg.user{justify-content:flex-end}
+    .bubble{max-width:76%;padding:10px 14px;border-radius:12px;font-size:14px;line-height:1.3}
+    .bubble.user{background:linear-gradient(90deg,#0ea5a7,#06b6d4);color:#002024;border-bottom-right-radius:4px}
+    .bubble.ai{background:rgba(255,255,255,0.04);color:var(--muted);border-bottom-left-radius:4px}
+
+    .composer{display:flex;gap:8px;margin-top:12px}
+    input[type=text]{flex:1;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:inherit}
+    button{padding:10px 14px;border-radius:10px;border:0;background:var(--accent);color:#042024;font-weight:700;cursor:pointer}
+    button.secondary{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
+
+    /* RIGHT: Tools */
+    .settings h3{margin:0 0 12px 0}
+    .setting{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+    .chip{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.03);font-size:13px}
+
+    footer{max-width:1100px;margin:10px auto;text-align:center;color:var(--muted);font-size:13px}
+
+    @media (max-width:980px){.app{grid-template-columns:1fr;padding:12px}.panel{padding:12px}}
+  
+  

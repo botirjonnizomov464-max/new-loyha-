@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>kichik ai</title>
+  <link rel="stylesheet" href="styles/style2.css">
+</head>
+<body>
+  <div class="app">
+    <!-- LEFT: Conversation list / 1-bo'lim -->
+    <div class="panel history" id="left">
+      <h3>1 — Suhbatlar</h3>
+      <div class="convo-list" id="convoList">
+        <!-- dynamic -->
+      </div>
+      <div style="margin-top:12px">
+        <button class="secondary" id="newConvBtn">+ Yangi suhbat</button>
+      </div>
+    </div>
+
+    <!-- CENTER: Main chat / 2-bo'lim -->
+    <div class="panel chat-area" id="center">
+      <div class="chat-header">
+        <div>
+          <strong id="convTitle">Oddiy AI</strong>
+          <div style="font-size:12px;color:var(--muted)">Backendsiz, faqat brauzer qoidalari bilan</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <div class="chip" id="statusChip">Model: Rules v1</div>
+        </div>
+      </div>
+
+      <div class="messages" id="messages" aria-live="polite"></div>
+
+      <div class="composer">
+        <input id="inputText" type="text" placeholder="Xabarni kiriting... (masalan: salom, bugun nechchi?)" />
+        <button id="sendBtn">Yuborish</button>
+        <button id="clearBtn" class="secondary">Tozalash</button>
+      </div>
+    </div>
+
+    <!-- RIGHT: Controls / 3-bo'lim -->
+    <div class="panel settings" id="right">
+      <h3>3 — Sozlamalar</h3>
+      <div class="setting">
+        <label>AI xulq (oddiy):</label>
+        <select id="behavior">
+          <option value="friendly">Do'stona</option>
+          <option value="short">Qisqa</option>
+          <option value="formal">Rasmiy</option>
+        </select>
+      </div>
+
+      <div class="setting">
+        <label>Misollar:</label>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="secondary example">Salom</button>
+          <button class="secondary example">Bugun sana</button>
+          <button class="secondary example">Matematik (5+7)</button>
+        </div>
+      </div>
+
+      <div class="setting">
+        <label>Maxsus javob qo'shish:</label>
+        <input id="customTrigger" type="text" placeholder="Trigger (masalan: yordam)" />
+        <input id="customReply" type="text" placeholder="Javob (masalan: Men yordam bera olaman)" />
+        <button id="addCustom">Qo'shish</button>
+      </div>
+
+      <div style="font-size:12px;color:var(--muted);margin-top:8px">Bu sahifa to'liq frontendda ishlaydi — hech qanday serverga yoki OpenAI ga so'rov jo'natilmaydi.</div>
+    </div>
+  </div>
+  <footer>Yaratildi — Nizomov Stidazimbek tomonida kichik ai.</footer>
+</body>
+<script>
+  const sendBtn = document.getElementById("sendBtn");
+  const clearBtn = document.getElementById("clearBtn");
+  const inputText = document.getElementById("inputText");
+  const messages = document.getElementById("messages");
+  const behaviorSelect = document.getElementById("behavior");
+  const exampleBtns = document.querySelectorAll(".example");
+  const addCustomBtn = document.getElementById("addCustom");
+  const customTrigger = document.getElementById("customTrigger");
+  const customReply = document.getElementById("customReply");
+  const newConvBtn = document.getElementById("newConvBtn");
+  const convoList = document.getElementById("convoList");
+
+  let customRules = {};
+
+  
+  function addMessage(text, sender = "ai") {
+    const msg = document.createElement("div");
+    msg.classList.add("msg", sender);
+    const bubble = document.createElement("div");
+    bubble.classList.add("bubble", sender);
+    bubble.textContent = text;
+    msg.appendChild(bubble);
+    messages.appendChild(msg);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+ 
+  function getAIReply(text) {
+    const lower = text.toLowerCase().trim();
+
+    // Maxsus javoblar
+    if (customRules[lower]) return customRules[lower];
+
+   
+    const answers = [
+      { k: ["salom", "assalomu alaykum"], v: "Salom! Qandaysiz? 😊" },
+      { k: ["isming nima"], v: "Men front-end AI, lekin siz meni xohlagancha atashingiz mumkin 😄" },
+      { k: ["qandaysan", "qalaysan"], v: "Zo‘rman! Sizchi? 😎" },
+      { k: ["rahmat"], v: "Arzimaydi! 🙂" },
+      { k: ["yordam", "nima qila olasan"], v: "Men siz bilan suhbatlasha olaman, hisob-kitob qilaman va savollarga javob beraman!" },
+      { k: ["bugun sana"], v: "Bugun: " + new Date().toLocaleDateString("uz-UZ") },
+      { k: ["soat", "vaqt"], v: "Hozirgi vaqt: " + new Date().toLocaleTimeString("uz-UZ") },
+      { k: ["ob havo"], v: "Hozircha internetga ulanmaganman 🌐, lekin umid qilamanki, ob-havo ajoyib!" },
+      { k: ["hazil", "kuldir"], v: "Kompyuter nega sovuq? Chunki u ko‘p ventilyatorga ega 😂" },
+      { k: ["tiling", "qaysi tilda"], v: "Men asosan O‘zbek tilida gaplashaman 🇺🇿" },
+      { k: ["raqam", "hisobla", "plus", "+", "-", "*", "/"], v: "Hisoblayapman..." },
+      { k: ["ha", "yo‘q"], v: "Hmm... qisqa javob, lekin tushundim 😅" },
+      { k: ["kim yaratgan", "kim yozgan"], v: "Meni siz kabi front-end dasturchilar yaratgan 💻" },
+      { k: ["qayerdansan"], v: "Men brauzer ichidaman 😄" },
+      { k: ["raqam", "tasodifiy"], v: "Tasodifiy son: " + Math.floor(Math.random() * 100) },
+      { k: ["qiziq fakt", "fakt ayt"], v: "Siz bilasizmi? Mushuklar uyda 70% vaqtini uxlab o‘tkazadi 😺" },
+    ];
+
+    for (const pair of answers) {
+      if (pair.k.some((w) => lower.includes(w))) {
+        // Agar bu hisoblash bo‘lsa:
+        if (lower.match(/[0-9]+\s*[\+\-\*\/]\s*[0-9]+/)) {
+          try {
+            return "Natija: " + eval(lower);
+          } catch {
+            return "Hisoblashda xatolik!";
+          }
+        }
+        return pair.v;
+      }
+    }
+
+  
+    const mode = behaviorSelect.value;
+    if (mode === "friendly") return "Hmm... qiziq fikr! Yana ayting 🙂";
+    if (mode === "short") return "OK.";
+    if (mode === "formal") return "Tushundim, davom eting iltimos.";
+
+    return "Bu haqda hali bilmayman 😅";
+  }
+
+  // Yuborish
+  function sendMessage() {
+    const text = inputText.value.trim();
+    if (!text) return;
+    addMessage(text, "user");
+    inputText.value = "";
+
+    setTimeout(() => {
+      const reply = getAIReply(text);
+      addMessage(reply, "ai");
+    }, 400);
+  }
+
+ 
+  sendBtn.addEventListener("click", sendMessage);
+  inputText.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") sendMessage();
+  });
+
+  clearBtn.addEventListener("click", () => {
+    messages.innerHTML = "";
+  });
+
+  exampleBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      inputText.value = btn.textContent;
+      sendMessage();
+    });
+  });
+
+  addCustomBtn.addEventListener("click", () => {
+    const trigger = customTrigger.value.trim().toLowerCase();
+    const reply = customReply.value.trim();
+    if (!trigger || !reply) return alert("Ikkala maydonni ham to‘ldiring!");
+
+    customRules[trigger] = reply;
+    alert(`"${trigger}" uchun javob qo‘shildi ✅`);
+    customTrigger.value = "";
+    customReply.value = "";
+  });
+
+  newConvBtn.addEventListener("click", () => {
+    const item = document.createElement("div");
+    item.classList.add("convo");
+    item.textContent = "Yangi suhbat #" + (convoList.children.length + 1);
+    convoList.appendChild(item);
+    messages.innerHTML = "";
+  });
+</script>
+
+</html>
